@@ -19,12 +19,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ArrayList<Comic> comics = new ArrayList<>();
     private RecyclerView comicRecycler;
     private ComicAdapter comicAdapter;
+    private int lastId;
+
+    final static String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +43,6 @@ public class MainActivity extends AppCompatActivity
         comicRecycler.setItemAnimator(new DefaultItemAnimator());
         comicRecycler.setAdapter(comicAdapter);
 
-        new ComicFetcher().execute("http://xkcd.com/614/info.0.json");
-        new ComicFetcher().execute("http://xkcd.com/615/info.0.json");
-        new ComicFetcher().execute("http://xkcd.com/616/info.0.json");
-        new ComicFetcher().execute("http://xkcd.com/617/info.0.json");
-        new ComicFetcher().execute("http://xkcd.com/618/info.0.json");
-        new ComicFetcher().execute("http://xkcd.com/619/info.0.json");
-        new ComicFetcher().execute("http://xkcd.com/620/info.0.json");
-        Log.d("MainActivity", comics.toString());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +61,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        loadComics();
     }
 
     @Override
@@ -123,6 +119,26 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void loadComics() {
+        if (this.comics.size() == 0) {
+            try {
+                lastId = new ComicFetcher().execute("http://xkcd.com/info.0.json").get().getId();
+            } catch (InterruptedException | ExecutionException e) {
+                Log.d(TAG, e.getLocalizedMessage());
+            }
+        }
+        loadNNext(10, lastId);
+        lastId -= 10;
+    }
+
+    private void loadNNext(int n, int lastId) {
+        for (int i = lastId - 1; i > lastId - 1 - n ; i--) {
+            if (i <= 0)
+                break;
+            new ComicFetcher().execute("http://xkcd.com/" + String.valueOf(i) +"/info.0.json");
+        }
     }
 
     private class ComicFetcher extends AsyncTask<String, Integer, Comic> {
