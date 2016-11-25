@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ArrayList<Comic> comics = new ArrayList<>();
     private RecyclerView comicRecycler;
     private ComicAdapter comicAdapter;
+    private DividerItemDecoration comicRecyclerDivider;
     private int lastId;
 
     final static String TAG = "MainActivity";
@@ -38,9 +40,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         comicRecycler = (RecyclerView) findViewById(R.id.main_recycler_view);
         comicAdapter = new ComicAdapter(comics);
-        RecyclerView.LayoutManager recyclerLayoutManager = new LinearLayoutManager(getApplicationContext());
+        LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(getApplicationContext());
+        comicRecyclerDivider = new DividerItemDecoration(comicRecycler.getContext(), recyclerLayoutManager.getOrientation());
         comicRecycler.setLayoutManager(recyclerLayoutManager);
         comicRecycler.setItemAnimator(new DefaultItemAnimator());
+        comicRecycler.addItemDecoration(comicRecyclerDivider);
         comicRecycler.setAdapter(comicAdapter);
 
 
