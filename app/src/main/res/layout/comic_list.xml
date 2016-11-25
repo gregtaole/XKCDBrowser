@@ -1,32 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="80dp"
+    android:paddingBottom="2dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:focusable="true"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
     android:clickable="true"
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/image"
-        android:layout_width="130dp"
-        android:layout_height="130dp" />
+        android:layout_width="80dp"
+        android:layout_height="80dp" />
+
+    <Space
+        android:id="@+id/space"
+        android:layout_width="10dp"
+        android:layout_height="80dp"
+        android:layout_toEndOf="@+id/image" />
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_toEndOf="@id/image"
-        android:layout_height="wrap_content" />
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_toEndOf="@id/space"
+        android:layout_alignTop="@+id/space"
+        android:textAppearance="@android:style/TextAppearance.Material.Title"
+        tools:text="Title"
+        android:fontFamily="noto"
+        android:typeface="normal"
+        android:textStyle="normal|bold"
+        android:textAllCaps="false"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/publication_date"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/title"
-        android:layout_toEndOf="@id/image"/>
+        android:layout_height="40dp"
+        android:layout_alignBottom="@+id/space"
+        android:layout_toEndOf="@id/space"
+        tools:text="2016-11-25"
+        android:textAppearance="@android:style/TextAppearance.Material.Body1"
+        android:textStyle="normal|italic"
+        android:textAlignment="viewStart" />
+
 
 </RelativeLayout>

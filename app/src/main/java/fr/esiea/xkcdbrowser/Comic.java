@@ -1,20 +1,20 @@
 package fr.esiea.xkcdbrowser;
 
-import java.net.URI;
+import android.net.Uri;
 
 public class Comic {
     private int id;
     private String title;
     private String alt;
     private String publicationDate;
-    private URI imageURI;
+    private Uri imageUri;
 
-    public Comic(int id, String title, String alt, String publicationDate, URI imageURI) {
+    public Comic(int id, String title, String alt, String publicationDate, Uri imageUri) {
         this.id = id;
         this.title = title;
         this.alt = alt;
         this.publicationDate = publicationDate;
-        this.imageURI = imageURI;
+        this.imageUri = imageUri;
     }
 
     public int getId() {
@@ -32,7 +32,7 @@ public class Comic {
     public String getPublicationDate() {
         return publicationDate;
     }
-    public URI getImageURI() {
-        return imageURI;
+    public Uri getImageUri() {
+        return imageUri;
     }
 }

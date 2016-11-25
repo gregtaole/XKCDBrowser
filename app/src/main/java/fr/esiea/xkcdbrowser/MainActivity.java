@@ -1,8 +1,13 @@
 package fr.esiea.xkcdbrowser;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,8 +18,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private ArrayList<Comic> comics = new ArrayList<>();
+    private RecyclerView comicRecycler;
+    private ComicAdapter comicAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +32,22 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        comicRecycler = (RecyclerView) findViewById(R.id.main_recycler_view);
+        comicAdapter = new ComicAdapter(comics);
+        RecyclerView.LayoutManager recyclerLayoutManager = new LinearLayoutManager(getApplicationContext());
+        comicRecycler.setLayoutManager(recyclerLayoutManager);
+        comicRecycler.setItemAnimator(new DefaultItemAnimator());
+        comicRecycler.setAdapter(comicAdapter);
+
+        new ComicFetcher().execute("http://xkcd.com/614/info.0.json");
+        new ComicFetcher().execute("http://xkcd.com/615/info.0.json");
+        new ComicFetcher().execute("http://xkcd.com/616/info.0.json");
+        new ComicFetcher().execute("http://xkcd.com/617/info.0.json");
+        new ComicFetcher().execute("http://xkcd.com/618/info.0.json");
+        new ComicFetcher().execute("http://xkcd.com/619/info.0.json");
+        new ComicFetcher().execute("http://xkcd.com/620/info.0.json");
+        Log.d("MainActivity", comics.toString());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -97,5 +123,26 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private class ComicFetcher extends AsyncTask<String, Integer, Comic> {
+        @Override
+        protected Comic doInBackground(String... urls) {
+            ComicBuilder builder = ComicBuilder.getInstance();
+            Comic newComic = builder.buildComic(urls[0]);
+            Log.d("MainActivity", newComic.getTitle());
+            if (newComic != null) {
+                return newComic;
+            }
+            else {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Comic result) {
+            comics.add(result);
+            comicAdapter.notifyDataSetChanged();
+        }
     }
 }
