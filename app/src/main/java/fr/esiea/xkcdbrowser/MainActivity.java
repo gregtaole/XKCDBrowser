@@ -38,24 +38,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        comicRecycler = (RecyclerView) findViewById(R.id.main_recycler_view);
-        comicAdapter = new ComicAdapter(comics);
-        LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(getApplicationContext());
-        comicRecyclerDivider = new DividerItemDecoration(comicRecycler.getContext(), recyclerLayoutManager.getOrientation());
-        comicRecycler.setLayoutManager(recyclerLayoutManager);
-        comicRecycler.setItemAnimator(new DefaultItemAnimator());
-        comicRecycler.addItemDecoration(comicRecyclerDivider);
-        comicRecycler.setAdapter(comicAdapter);
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -65,6 +55,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        comicRecycler = (RecyclerView) findViewById(R.id.main_recycler_view);
+        comicAdapter = new ComicAdapter(comics);
+        LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(getApplicationContext());
+        comicRecyclerDivider = new DividerItemDecoration(comicRecycler.getContext(), recyclerLayoutManager.getOrientation());
+        comicRecycler.setLayoutManager(recyclerLayoutManager);
+        comicRecycler.setItemAnimator(new DefaultItemAnimator());
+        comicRecycler.addItemDecoration(comicRecyclerDivider);
+        comicRecycler.setAdapter(comicAdapter);
+
         loadComics();
     }
 
