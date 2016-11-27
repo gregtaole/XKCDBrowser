@@ -1,10 +1,16 @@
 package fr.esiea.xkcdbrowser;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,11 +29,13 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NetworkConnectivityDialogFragment.NetworkConnectivityListener {
     private ArrayList<Comic> comics = new ArrayList<>();
     private RecyclerView comicRecycler;
     private ComicAdapter comicAdapter;
     private DividerItemDecoration comicRecyclerDivider;
+    private ConnectivityManager connectivityManager;
+    private NetworkInfo networkInfo;
     private int lastId;
 
     final static String TAG = "MainActivity";
@@ -39,14 +47,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });*/
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -56,6 +64,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connectivityManager.getActiveNetworkInfo();
 
         comicRecycler = (RecyclerView) findViewById(R.id.main_recycler_view);
         comicAdapter = new ComicAdapter(comics);
@@ -82,7 +93,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        loadComics();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            loadComics();
+        } else {
+            DialogFragment dialogFragment = new NetworkConnectivityDialogFragment();
+            dialogFragment.show(this.getSupportFragmentManager(), "NetworkConnectivityDialog");
+        }
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            loadComics();
+        } else {
+            DialogFragment dialogFragment = new NetworkConnectivityDialogFragment();
+            dialogFragment.show(this.getSupportFragmentManager(), "NetworkConnectivityDialog");
+        }
+
     }
 
     @Override
@@ -134,6 +165,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialogFragment) {
+        startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+    }
+
+    @Override
+    public void onDialogNeutralClick(DialogFragment dialogFragment) {
+        this.finish();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialogFragment) {
+        startActivity(new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS));
     }
 
     private void loadMoreComics() {
