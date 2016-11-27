@@ -2,6 +2,7 @@ package fr.esiea.xkcdbrowser;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -64,6 +65,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         comicRecycler.setItemAnimator(new DefaultItemAnimator());
         comicRecycler.addItemDecoration(comicRecyclerDivider);
         comicRecycler.setAdapter(comicAdapter);
+        comicRecycler.addOnScrollListener(new RecyclerViewScrollListener() {
+            @Override
+            public void onScrollUp() {
+
+            }
+
+            @Override
+            public void onScrollDown() {
+
+            }
+
+            @Override
+            public void onLoadMore() {
+                loadMoreComics();
+            }
+        });
 
         loadComics();
     }
@@ -117,6 +134,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void loadMoreComics() {
+        comicAdapter.setShowLoader(true);
+        comicAdapter.notifyDataSetChanged();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadComics();
+                comicAdapter.setShowLoader(false);
+                comicAdapter.notifyDataSetChanged();
+            }
+        }, 3000);
     }
 
     private void loadComics() {

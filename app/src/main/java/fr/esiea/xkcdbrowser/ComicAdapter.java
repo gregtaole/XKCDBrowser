@@ -17,6 +17,7 @@ public class ComicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int TYPE_FOOTER = 1;
 
     private ArrayList<Comic> comics;
+    private boolean showLoader;
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         public TextView titleView;
@@ -65,10 +66,14 @@ public class ComicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             itemViewHolder.titleView.setText(comic.getTitle());
             itemViewHolder.dateView.setText(comic.getPublicationDate());
             itemViewHolder.imageView.setImageURI(comic.getImageUri());
-        } /*else if (holder instanceof FooterViewHolder) {
+        } else if (holder instanceof FooterViewHolder) {
             FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
-            footerViewHolder
-        }*/
+            if (showLoader) {
+                footerViewHolder.progressBar.setVisibility(View.VISIBLE);
+            } else {
+                footerViewHolder.progressBar.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
@@ -87,5 +92,9 @@ public class ComicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private boolean isPositionFooter (int position) {
         return position == comics.size();
+    }
+
+    public void setShowLoader(boolean status) {
+        showLoader = status;
     }
 }
