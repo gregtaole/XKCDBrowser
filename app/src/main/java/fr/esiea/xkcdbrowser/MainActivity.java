@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NetworkInfo networkInfo;
     private int lastId;
 
+    public static final String EXTRA_COMIC = "fr.esiea.xkcdbrowser.COMIC";
+
     final static String TAG = "MainActivity";
 
     @Override
@@ -92,6 +94,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 loadMoreComics();
             }
         });
+        comicAdapter.setClickListener(new RecyclerViewItemClickListener() {
+            @Override
+            public void itemClicked(View view, int position) {
+                Intent intent = new Intent(view.getContext(), ComicViewerActivity.class);
+                intent.putExtra(EXTRA_COMIC, comics.get(position));
+                Log.d(TAG, "Click !");
+                startActivity(intent);
+            }
+        });
 
         if (networkInfo != null && networkInfo.isConnected()) {
             loadComics();
@@ -107,9 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onRestart();
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            loadComics();
-        } else {
+        if (!(networkInfo != null && networkInfo.isConnected())) {
             DialogFragment dialogFragment = new NetworkConnectivityDialogFragment();
             dialogFragment.show(this.getSupportFragmentManager(), "NetworkConnectivityDialog");
         }

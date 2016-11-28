@@ -1,8 +1,10 @@
 package fr.esiea.xkcdbrowser;
 
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Comic {
+public class Comic implements Parcelable {
     private int id;
     private String title;
     private String alt;
@@ -16,6 +18,40 @@ public class Comic {
         this.publicationDate = publicationDate;
         this.imageUri = imageUri;
     }
+
+    private Comic(Parcel in) {
+        this.id = in.readInt();
+        this.title = in.readString();
+        this.alt = in.readString();
+        this.publicationDate = in.readString();
+        this.imageUri = Uri.parse(in.readString());
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(this.id);
+        out.writeString(this.title);
+        out.writeString(this.alt);
+        out.writeString(this.publicationDate);
+        out.writeString(this.imageUri.toString());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Parcelable.Creator<Comic> CREATOR = new Parcelable.Creator<Comic>() {
+        @Override
+        public Comic createFromParcel(Parcel in) {
+            return new Comic(in);
+        }
+
+        @Override
+        public Comic[] newArray(int size) {
+            return new Comic[size];
+        }
+    };
 
     public int getId() {
         return id;
@@ -32,6 +68,7 @@ public class Comic {
     public String getPublicationDate() {
         return publicationDate;
     }
+
     public Uri getImageUri() {
         return imageUri;
     }

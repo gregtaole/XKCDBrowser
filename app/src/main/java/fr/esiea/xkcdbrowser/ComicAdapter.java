@@ -12,24 +12,36 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import java.util.ArrayList;
 
 public class ComicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final String TAG = "ComicAdapter";
 
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
 
     private ArrayList<Comic> comics;
     private boolean showLoader;
+    private static RecyclerViewItemClickListener clickListener;
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        public TextView titleView;
-        public TextView dateView;
-        public SimpleDraweeView imageView;
+    public static class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private TextView titleView;
+        private TextView dateView;
+        private SimpleDraweeView imageView;
+
         public ItemViewHolder(View v) {
             super(v);
             titleView = (TextView) v.findViewById(R.id.title);
             dateView = (TextView) v.findViewById(R.id.publication_date);
             imageView = (SimpleDraweeView) v.findViewById(R.id.image);
+            titleView.setOnClickListener(this);
+            dateView.setOnClickListener(this);
+            imageView.setOnClickListener(this);
+            v.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            if (clickListener != null)
+                clickListener.itemClicked(v, getAdapterPosition());
+        }
     }
 
     public static class FooterViewHolder extends RecyclerView.ViewHolder {
@@ -92,6 +104,10 @@ public class ComicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private boolean isPositionFooter (int position) {
         return position == comics.size();
+    }
+
+    public void setClickListener(RecyclerViewItemClickListener recyclerViewItemClickListener) {
+        this.clickListener = recyclerViewItemClickListener;
     }
 
     public void setShowLoader(boolean status) {
