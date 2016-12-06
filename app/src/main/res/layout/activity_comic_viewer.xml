@@ -6,6 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="fr.esiea.xkcdbrowser.ComicViewerActivity">
+    
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/comic_viewer_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/AppTheme.AppBarOverlay" />
 
     <TextView
         android:id="@+id/comic_viewer_title"

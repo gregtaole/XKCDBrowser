@@ -1,8 +1,10 @@
 package fr.esiea.xkcdbrowser;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -14,6 +16,10 @@ public class ComicViewerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comic_viewer);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.comic_viewer_toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 //        Log.d(TAG, "Shazbot !");
         Intent intent = getIntent();
         Comic comic = intent.getParcelableExtra(MainActivity.EXTRA_COMIC);
