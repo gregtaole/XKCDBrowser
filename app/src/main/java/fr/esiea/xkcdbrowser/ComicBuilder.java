@@ -32,7 +32,7 @@ public class ComicBuilder {
 
     public Comic buildComic (String comicURL) {
         Comic newComic;
-        Log.d("ComicBuilder", "ylol");
+
         try {
             URL url = new URL(comicURL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
