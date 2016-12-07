@@ -1,10 +1,6 @@
 package fr.esiea.xkcdbrowser;
 
-import android.net.Uri;
 import android.util.Log;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,31 +34,23 @@ public class ComicBuilder {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.connect();
+
             if(connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 StringBuilder sb = new StringBuilder();
+                String line;
 
-                String line = null;
                 while ((line = reader.readLine()) != null) {
                     sb.append(line + "\n");
                 }
-                String result = sb.toString();
-                JSONObject comicJson = new JSONObject(result);
-                int id = comicJson.getInt("num");
-                String title = comicJson.getString("title");
-                String alt = comicJson.getString("alt");
-                int year = comicJson.getInt("year");
-                int month = comicJson.getInt("month");
-                int day = comicJson.getInt("day");
-                String publicationDate = Integer.toString(year) + "-" + Integer.toString(month) + "-" + Integer.toString(day);
-                Uri imageURI = Uri.parse(comicJson.getString("img"));
 
-                newComic = new Comic(id, title, alt, publicationDate, imageURI);
+                newComic = new Comic(sb.toString());
+
                 Log.d("ComicBuilder", newComic.getTitle());
                 return newComic;
             }
         }
-        catch (JSONException | IOException e) {
+        catch (IOException e) {
             Log.d("ComicBuilder", e.getMessage());
         }
 

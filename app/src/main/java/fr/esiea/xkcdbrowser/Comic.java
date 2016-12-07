@@ -3,6 +3,10 @@ package fr.esiea.xkcdbrowser;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Comic implements Parcelable {
     private int id;
@@ -11,12 +15,19 @@ public class Comic implements Parcelable {
     private String publicationDate;
     private Uri imageUri;
 
-    public Comic(int id, String title, String alt, String publicationDate, Uri imageUri) {
-        this.id = id;
-        this.title = title;
-        this.alt = alt;
-        this.publicationDate = publicationDate;
-        this.imageUri = imageUri;
+    public Comic(String jsonString) {
+        try {
+            JSONObject comicJson = new JSONObject(jsonString);
+            this.id = comicJson.getInt("num");
+            this.title = comicJson.getString("title");
+            this.alt = comicJson.getString("alt");
+            this.publicationDate = Integer.toString(comicJson.getInt("year")) + "-";
+            this.publicationDate += Integer.toString(comicJson.getInt("month")) + "-";
+            this.publicationDate += Integer.toString(comicJson.getInt("day"));
+            this.imageUri = Uri.parse(comicJson.getString("img"));
+        } catch (JSONException e) {
+            Log.d("ComicBuilderJSON", e.getMessage());
+        }
     }
 
     private Comic(Parcel in) {
