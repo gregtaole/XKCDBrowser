@@ -13,20 +13,20 @@ public class NetworkConnectivityDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("XKCDBrowser requires network connectivity. Go to network settings ?")
-                .setPositiveButton("Wifi", new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.dialog_connectivity_message)
+                .setPositiveButton(R.string.dialog_connectivity_positive, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         networkConnectivityListener.onDialogPositiveClick(NetworkConnectivityDialogFragment.this);
                     }
                 })
-                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.dialog_connectivity_neutral, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         networkConnectivityListener.onDialogNeutralClick(NetworkConnectivityDialogFragment.this);
                     }
                 })
-                .setNegativeButton("Data", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.dialog_connectivity_negative, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         networkConnectivityListener.onDialogNegativeClick(NetworkConnectivityDialogFragment.this);
