@@ -10,5 +10,6 @@
     <string name="dialog_connectivity_neutral">Annuler</string>
     <string name="dialog_connectivity_negative">Data</string>
 
+    <string name="action_favorite">Ajouter au favoris</string>
     <string name="action_settings">Paramètres</string>
 </resources>

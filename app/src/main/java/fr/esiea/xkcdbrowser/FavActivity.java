@@ -29,12 +29,12 @@ public class FavActivity extends AppCompatActivity implements NavigationView.OnN
     private ComicAdapter comicAdapter;
     private DividerItemDecoration comicRecyclerDivider;
 
-    final static String TAG = "MainActivity";
+    final static String TAG = "FavActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_favorites);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -47,7 +47,7 @@ public class FavActivity extends AppCompatActivity implements NavigationView.OnN
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        comicRecycler = (RecyclerView) findViewById(R.id.main_recycler_view);
+        comicRecycler = (RecyclerView) findViewById(R.id.favorites_recycler_view);
         comicAdapter = new ComicAdapter(favComics);
         LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(getApplicationContext());
         comicRecyclerDivider = new DividerItemDecoration(comicRecycler.getContext(), recyclerLayoutManager.getOrientation());
