@@ -9,30 +9,18 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import java.util.ArrayList;
+public class AboutActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-public class FavActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NetworkConnectivityDialogFragment.NetworkConnectivityListener {
-    private ArrayList<Comic> favComics = new ArrayList<>();
-    private RecyclerView comicRecycler;
-    private ComicAdapter comicAdapter;
-    private DividerItemDecoration comicRecyclerDivider;
-
-    final static String TAG = "MainActivity";
+    final static String TAG = "AboutActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_about);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -44,39 +32,6 @@ public class FavActivity extends AppCompatActivity implements NavigationView.OnN
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        comicRecycler = (RecyclerView) findViewById(R.id.main_recycler_view);
-        comicAdapter = new ComicAdapter(favComics);
-        LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(getApplicationContext());
-        comicRecyclerDivider = new DividerItemDecoration(comicRecycler.getContext(), recyclerLayoutManager.getOrientation());
-        comicRecycler.setLayoutManager(recyclerLayoutManager);
-        comicRecycler.setItemAnimator(new DefaultItemAnimator());
-        comicRecycler.addItemDecoration(comicRecyclerDivider);
-        comicRecycler.setAdapter(comicAdapter);
-        comicRecycler.addOnScrollListener(new RecyclerViewScrollListener() {
-            @Override
-            public void onScrollUp() {
-
-            }
-
-            @Override
-            public void onScrollDown() {
-
-            }
-
-            @Override
-            public void onLoadMore() {
-
-            }
-        });
-        comicAdapter.setClickListener(new RecyclerViewItemClickListener() {
-            @Override
-            public void itemClicked(View view, int position) {
-                Log.d(TAG, "Click !");
-            }
-        });
-
-        loadComics();
     }
 
     @Override
@@ -128,24 +83,5 @@ public class FavActivity extends AppCompatActivity implements NavigationView.OnN
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void onDialogPositiveClick(DialogFragment dialogFragment) {
-        startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-    }
-
-    @Override
-    public void onDialogNeutralClick(DialogFragment dialogFragment) {
-        this.finish();
-    }
-
-    @Override
-    public void onDialogNegativeClick(DialogFragment dialogFragment) {
-        startActivity(new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS));
-    }
-
-    private void loadComics() {
-        //Load fav here
     }
 }
