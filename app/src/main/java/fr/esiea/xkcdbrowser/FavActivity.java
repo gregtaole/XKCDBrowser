@@ -29,6 +29,7 @@ public class FavActivity extends ComicFetcherInterface implements NavigationView
     private FavManager favManager;
 
     final static String TAG = "FavActivity";
+    public static final String EXTRA_COMIC = "fr.esiea.xkcdbrowser.COMIC";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,10 @@ public class FavActivity extends ComicFetcherInterface implements NavigationView
         comicAdapter.setClickListener(new RecyclerViewItemClickListener() {
             @Override
             public void itemClicked(View view, int position) {
+                Intent intent = new Intent(view.getContext(), ComicViewerActivity.class);
+                intent.putExtra(EXTRA_COMIC, favComics.get(position));
                 Log.d(TAG, "Click !");
+                startActivity(intent);
             }
         });
 
