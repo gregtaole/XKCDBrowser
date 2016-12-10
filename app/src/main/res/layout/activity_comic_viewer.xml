@@ -1,50 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/comic_viewer_coordinator"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_comic_viewer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="fr.esiea.xkcdbrowser.ComicViewerActivity">
-    
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/comic_viewer_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/AppTheme.AppBarOverlay" />
+    android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/comic_viewer_title"
+    <RelativeLayout
+        android:id="@+id/activity_comic_viewer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="4dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        tools:text="Comic Title"
-        android:textAppearance="@android:style/TextAppearance.Material.Title"
-        android:textAlignment="center" />
+        android:layout_height="match_parent"
+        tools:context="fr.esiea.xkcdbrowser.ComicViewerActivity">
 
-    <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/comic_viewer_comic"
-        android:layout_below="@+id/comic_viewer_title"
-        fresco:actualImageScaleType="fitCenter"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/comic_viewer_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/AppTheme.AppBarOverlay" />
 
-    <TextView
-        android:id="@+id/comic_viewer_alt"
-        android:layout_below="@+id/comic_viewer_comic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        tools:text="alt text example"
-        android:textAppearance="@android:style/TextAppearance.Material.Body1"
-        android:textStyle="normal|italic"
-        android:textAlignment="center" />
+        <TextView
+            android:id="@+id/comic_viewer_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/comic_viewer_toolbar"
+            android:paddingTop="4dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            tools:text="Comic Title"
+            android:textAppearance="@android:style/TextAppearance.Material.Title"
+            android:textAlignment="center" />
 
-</RelativeLayout>
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/comic_viewer_comic"
+            android:layout_below="@+id/comic_viewer_title"
+            fresco:actualImageScaleType="fitCenter"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp" />
+
+        <TextView
+            android:id="@+id/comic_viewer_alt"
+            android:layout_below="@+id/comic_viewer_comic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            tools:text="alt text example"
+            android:textAppearance="@android:style/TextAppearance.Material.Body1"
+            android:textStyle="normal|italic"
+            android:textAlignment="center" />
+
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
+

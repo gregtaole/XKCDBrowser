@@ -146,6 +146,6 @@ public class FavActivity extends AppCompatActivity implements NavigationView.OnN
     }
 
     private void loadComics() {
-        //Load fav here
+
     }
 }

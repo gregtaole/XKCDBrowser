@@ -9,6 +9,9 @@
     <string name="dialog_connectivity_neutral">Cancel</string>
     <string name="dialog_connectivity_negative">Data</string>
 
+    <string name="snackbar_favorites">Added to favorites</string>
+    <string name="snackbar_already_favorite">Already a favorite</string>
+
     <string name="action_favorite">Favorite</string>
     <string name="action_settings">Settings</string>
 </resources>
