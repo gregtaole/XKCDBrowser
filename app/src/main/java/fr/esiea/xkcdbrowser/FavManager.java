@@ -33,40 +33,37 @@ public class FavManager extends Activity {
         loadFavorites();
     }
 
-    public void setContext(Context context) {
-        this.context = context;
-    }
-
     public void addToFavorites(Comic comic) throws AlreadyFavoriteException {
         Log.d(TAG, favorites.toString());
 
-        if(isAlreadyFavorites(comic.getId())) {
+        if(isAlreadyFavorites(comic)) {
             throw new AlreadyFavoriteException();
         }
 
-        FileOutputStream outputStream;
-        String separator = System.getProperty("line.separator");
+        favorites.add(comic.getId());
+        updateFavorites();
 
-        try {
-            outputStream = context.openFileOutput(favFilename, Context.MODE_APPEND);
-            outputStream.write(String.valueOf(comic.getId()).getBytes());
-            outputStream.write(separator.getBytes());
-            outputStream.close();
-        }
-        catch (IOException e) {
-            Log.d(TAG, e.getMessage());
-        }
-
-        loadFavorites(); //Reload list
         Log.d(TAG, favorites.toString());
     }
 
     public void removeFavorite(Comic comic) {
+        Log.d(TAG, favorites.toString());
 
+        if(isAlreadyFavorites(comic)) {
+            favorites.remove(favorites.indexOf(comic.getId()));
+            updateFavorites();
+        }
+
+        Log.d(TAG, favorites.toString());
     }
 
-    public boolean isAlreadyFavorites(Integer comicId) {
-        return favorites.contains(comicId);
+    private void updateFavorites() {
+        writeFavorites(); //Write list
+        loadFavorites(); //Reload list
+    }
+
+    public boolean isAlreadyFavorites(Comic comic) {
+        return favorites.contains(comic.getId());
     }
 
     public ArrayList<Integer> getFavorites() {
@@ -88,6 +85,23 @@ public class FavManager extends Activity {
                 favorites.add(Integer.valueOf(line));
             }
             inputStream.close();
+        }
+        catch (IOException e) {
+            Log.d(TAG, e.getMessage());
+        }
+    }
+
+    private void writeFavorites() {
+        FileOutputStream outputStream;
+        String separator = System.getProperty("line.separator");
+
+        try {
+            outputStream = context.openFileOutput(favFilename, Context.MODE_PRIVATE);
+            for (Integer id : favorites) {
+                outputStream.write(String.valueOf(id).getBytes());
+                outputStream.write(separator.getBytes());
+            }
+            outputStream.close();
         }
         catch (IOException e) {
             Log.d(TAG, e.getMessage());

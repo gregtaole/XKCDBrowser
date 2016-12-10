@@ -48,7 +48,7 @@ public class ComicViewerActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_comic_viewer, menu);
-        if (favManager.isAlreadyFavorites(comic.getId())) {
+        if (favManager.isAlreadyFavorites(comic)) {
             menu.getItem(0).setIcon(getDrawable(R.drawable.ic_menu_unfav));
         } else {
             menu.getItem(0).setIcon(getDrawable(R.drawable.ic_menu_fav));
@@ -68,12 +68,15 @@ public class ComicViewerActivity extends AppCompatActivity {
             return true;
         }
         else if (id == R.id.action_favorite) {
-            if (favManager.isAlreadyFavorites(comic.getId())) {
-                    favManager.removeFavorite(comic);
+            if (favManager.isAlreadyFavorites(comic)) {
+                favManager.removeFavorite(comic);
+                item.setIcon(getDrawable(R.drawable.ic_menu_fav));
+                Snackbar.make(findViewById(R.id.comic_viewer_coordinator), R.string.snackbar_removed_favorites, Snackbar.LENGTH_SHORT).show();
             }
             else {
                 try {
                     favManager.addToFavorites(comic);
+                    item.setIcon(getDrawable(R.drawable.ic_menu_unfav));
                     Snackbar.make(findViewById(R.id.comic_viewer_coordinator), R.string.snackbar_favorites, Snackbar.LENGTH_SHORT).show();
                 }
                 catch (AlreadyFavoriteException e) {
