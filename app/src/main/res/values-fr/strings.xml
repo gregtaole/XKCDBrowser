@@ -14,7 +14,8 @@
     <string name="dialog_connectivity_neutral">Annuler</string>
     <string name="dialog_connectivity_negative">Data</string>
 
-    <string name="snackbar_favorites">Ajouté au favoris</string>
+    <string name="snackbar_favorites">Ajouté aux favoris</string>
+    <string name="snackbar_removed_favorites">Supprimé des favoris</string>
     <string name="snackbar_already_favorite">Déjà un favoris</string>
 
     <string name="action_favorite">Ajouter au favoris</string>
