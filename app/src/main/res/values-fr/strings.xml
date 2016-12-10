@@ -4,6 +4,10 @@
 
     <string name="navigation_drawer_open">Ouvrir le menu de navigation</string>
     <string name="navigation_drawer_close">Fermer le menu de navigation</string>
+    <string name="navigation_menu_browse">Parcourir</string>
+    <string name="navigation_menu_favorites">Favoris</string>
+    <string name="navigation_menu_about">À propos</string>
+    <string name="navigation_menu_info">Infos</string>
 
     <string name="dialog_connectivity_message">XKCDBrowser nécessite une connexion Internet pour fonctionner. Ouvrir les paramètres réseaux ?</string>
     <string name="dialog_connectivity_positive">Wifi</string>

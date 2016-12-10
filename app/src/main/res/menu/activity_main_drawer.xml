@@ -5,19 +5,19 @@
         <item
             android:id="@+id/nav_browse"
             android:icon="@drawable/ic_menu_browse"
-            android:title="Browse" />
+            android:title="@string/navigation_menu_browse" />
         <item
             android:id="@+id/nav_fav"
             android:icon="@drawable/ic_menu_fav"
-            android:title="Favorites" />
+            android:title="@string/navigation_menu_favorites" />
     </group>
 
-    <item android:title="Info">
+    <item android:title="@string/navigation_menu_info">
         <menu>
             <item
                 android:id="@+id/nav_info"
                 android:icon="@drawable/ic_menu_info"
-                android:title="About" />
+                android:title="@string/navigation_menu_about" />
         </menu>
     </item>
 
