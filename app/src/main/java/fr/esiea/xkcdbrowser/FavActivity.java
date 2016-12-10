@@ -8,7 +8,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,11 +20,13 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-public class FavActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NetworkConnectivityDialogFragment.NetworkConnectivityListener {
+public class FavActivity extends ComicFetcherInterface implements NavigationView.OnNavigationItemSelectedListener, NetworkConnectivityDialogFragment.NetworkConnectivityListener {
     private ArrayList<Comic> favComics = new ArrayList<>();
+    private ArrayList<Integer> favIds = new ArrayList<>();
     private RecyclerView comicRecycler;
     private ComicAdapter comicAdapter;
     private DividerItemDecoration comicRecyclerDivider;
+    private FavManager favManager;
 
     final static String TAG = "FavActivity";
 
@@ -75,6 +76,7 @@ public class FavActivity extends AppCompatActivity implements NavigationView.OnN
             }
         });
 
+        favManager = FavManager.getInstance(this);
         loadComics();
     }
 
@@ -145,6 +147,19 @@ public class FavActivity extends AppCompatActivity implements NavigationView.OnN
     }
 
     private void loadComics() {
+        favIds = favManager.getFavorites();
+        for (Integer id : favIds) {
+            new ComicFetcher().execute("http://xkcd.com/" + String.valueOf(id) +"/info.0.json", this);
+        }
+    }
 
+    @Override
+    public ArrayList<Comic> getComics() {
+        return favComics;
+    }
+
+    @Override
+    public ComicAdapter getComicAdapter() {
+        return comicAdapter;
     }
 }

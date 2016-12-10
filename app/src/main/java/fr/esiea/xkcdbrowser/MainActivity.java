@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -19,7 +18,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +25,7 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NetworkConnectivityDialogFragment.NetworkConnectivityListener {
+public class MainActivity extends ComicFetcherInterface implements NavigationView.OnNavigationItemSelectedListener, NetworkConnectivityDialogFragment.NetworkConnectivityListener {
     private ArrayList<Comic> comics = new ArrayList<>();
     private RecyclerView comicRecycler;
     private ComicAdapter comicAdapter;
@@ -196,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void loadComics() {
         if (this.comics.size() == 0) {
             try {
-                lastId = new ComicFetcher().execute("http://xkcd.com/info.0.json").get().getId();
+                lastId = new ComicFetcher().execute("http://xkcd.com/info.0.json", this).get().getId();
             } catch (InterruptedException | ExecutionException e) {
                 Log.d(TAG, e.getLocalizedMessage());
             }
@@ -209,28 +207,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         for (int i = lastId - 1; i > lastId - 1 - n ; i--) {
             if (i <= 0)
                 break;
-            new ComicFetcher().execute("http://xkcd.com/" + String.valueOf(i) +"/info.0.json");
+            new ComicFetcher().execute("http://xkcd.com/" + String.valueOf(i) +"/info.0.json", this);
         }
     }
 
-    private class ComicFetcher extends AsyncTask<String, Integer, Comic> {
-        @Override
-        protected Comic doInBackground(String... urls) {
-            ComicBuilder builder = ComicBuilder.getInstance();
-            Comic newComic = builder.buildComic(urls[0]);
-            Log.d("MainActivity", newComic.getTitle());
-            if (newComic != null) {
-                return newComic;
-            }
-            else {
-                return null;
-            }
-        }
+    public ArrayList<Comic> getComics() {
+        return comics;
+    }
 
-        @Override
-        protected void onPostExecute(Comic result) {
-            comics.add(result);
-            comicAdapter.notifyDataSetChanged();
-        }
+    public ComicAdapter getComicAdapter() {
+        return comicAdapter;
     }
 }
