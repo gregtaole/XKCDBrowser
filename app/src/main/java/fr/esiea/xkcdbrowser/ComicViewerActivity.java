@@ -48,6 +48,11 @@ public class ComicViewerActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_comic_viewer, menu);
+        if (favManager.isAlreadyFavorites(comic.getId())) {
+            menu.getItem(0).setIcon(getDrawable(R.drawable.ic_menu_unfav));
+        } else {
+            menu.getItem(0).setIcon(getDrawable(R.drawable.ic_menu_fav));
+        }
         return true;
     }
 
@@ -63,12 +68,17 @@ public class ComicViewerActivity extends AppCompatActivity {
             return true;
         }
         else if (id == R.id.action_favorite) {
-            try {
-                favManager.addToFavorites(comic);
-                Snackbar.make(findViewById(R.id.comic_viewer_coordinator), R.string.snackbar_favorites, Snackbar.LENGTH_SHORT).show();
+            if (favManager.isAlreadyFavorites(comic.getId())) {
+                    favManager.removeFavorite(comic);
             }
-            catch (AlreadyFavoriteException e) {
-                Snackbar.make(findViewById(R.id.comic_viewer_coordinator), R.string.snackbar_already_favorite, Snackbar.LENGTH_SHORT).show();
+            else {
+                try {
+                    favManager.addToFavorites(comic);
+                    Snackbar.make(findViewById(R.id.comic_viewer_coordinator), R.string.snackbar_favorites, Snackbar.LENGTH_SHORT).show();
+                }
+                catch (AlreadyFavoriteException e) {
+                    Snackbar.make(findViewById(R.id.comic_viewer_coordinator), R.string.snackbar_already_favorite, Snackbar.LENGTH_SHORT).show();
+                }
             }
 
             return true;

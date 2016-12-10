@@ -44,7 +44,6 @@ public class FavActivity extends AppCompatActivity implements NavigationView.OnN
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         comicRecycler = (RecyclerView) findViewById(R.id.favorites_recycler_view);
         comicAdapter = new ComicAdapter(favComics);
         LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(getApplicationContext());

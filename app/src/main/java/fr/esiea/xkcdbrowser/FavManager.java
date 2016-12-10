@@ -61,6 +61,10 @@ public class FavManager extends Activity {
         Log.d(TAG, favorites.toString());
     }
 
+    public void removeFavorite(Comic comic) {
+
+    }
+
     public boolean isAlreadyFavorites(Integer comicId) {
         return favorites.contains(comicId);
     }
