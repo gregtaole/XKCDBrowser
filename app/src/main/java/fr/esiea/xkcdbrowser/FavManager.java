@@ -97,8 +97,8 @@ public class FavManager extends Activity {
 
         try {
             outputStream = context.openFileOutput(favFilename, Context.MODE_PRIVATE);
-            for (Integer i = 0; i < favorites.size(); ++i) {
-                outputStream.write(String.valueOf(favorites.get(i)).getBytes());
+            for (Integer id : favorites) {
+                outputStream.write(String.valueOf(id).getBytes());
                 outputStream.write(separator.getBytes());
             }
             outputStream.close();
