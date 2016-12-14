@@ -44,7 +44,7 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
 
     public static final String EXTRA_COMIC = "fr.esiea.xkcdbrowser.COMIC";
     public static final String EXTRA_URL = "fr.esiea.xkcdbrowser.XKCD_LAST_COMIC_URL";
-    public static final String XKCD_LAST_COMIC_URL = "http://xkcd.com/info.0.json";
+    public static final String EXTRA_LAST_ID  = "fr.esie.xkcdbrowser.LAST_ID";
 
     final static String TAG = "MainActivity";
 
@@ -52,20 +52,6 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //Service and alarm
-        alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        newComicIntent = new Intent(this, NewComicService.class);
-        newComicIntent.putExtra(EXTRA_URL, XKCD_LAST_COMIC_URL);
-        alarmIntent = PendingIntent.getService(this, 0, newComicIntent, 0);
-        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime(),
-                60 * 1000, //AlarmManager.INTERVAL_HOUR * 2,
-                alarmIntent);
-
-        IntentFilter intentFilter = new IntentFilter(NewComicService.ACTION_NEW);
-        NewComicBR newComicBR = new NewComicBR();
-        LocalBroadcastManager.getInstance(this).registerReceiver(newComicBR, intentFilter);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -122,6 +108,8 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
             DialogFragment dialogFragment = new NetworkConnectivityDialogFragment();
             dialogFragment.show(this.getSupportFragmentManager(), "NetworkConnectivityDialog");
         }
+
+        this.startNewComicService();
     }
 
     @Override
@@ -220,7 +208,7 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
         Log.d(TAG, "ID: " + lastId);
         if (this.comics.size() == 0) {
             try {
-                lastId = new ComicFetcher().execute(XKCD_LAST_COMIC_URL, this).get().getId();
+                lastId = new ComicFetcher().execute(Constants.XKCD_LAST_COMIC_URL, this).get().getId();
             } catch (InterruptedException | ExecutionException e) {
                 Log.d(TAG, e.getLocalizedMessage());
             }
@@ -236,6 +224,23 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
                 break;
             new ComicFetcher().execute("http://xkcd.com/" + String.valueOf(i) +"/info.0.json", this);
         }
+    }
+
+    private void startNewComicService() {
+        //Service and alarm
+        alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        newComicIntent = new Intent(this, NewComicService.class);
+        newComicIntent.putExtra(EXTRA_URL, Constants.XKCD_LAST_COMIC_URL);
+        newComicIntent.putExtra(EXTRA_LAST_ID, lastId);
+        alarmIntent = PendingIntent.getService(this, 0, newComicIntent, 0);
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime(),
+                60 * 1000, //AlarmManager.INTERVAL_HOUR * 2,
+                alarmIntent);
+
+        IntentFilter intentFilter = new IntentFilter(NewComicService.ACTION_NEW);
+        NewComicBR newComicBR = new NewComicBR();
+        LocalBroadcastManager.getInstance(this).registerReceiver(newComicBR, intentFilter);
     }
 
     public ArrayList<Comic> getComics() {
