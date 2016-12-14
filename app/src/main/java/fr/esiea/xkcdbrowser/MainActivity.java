@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -60,6 +62,10 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
                 SystemClock.elapsedRealtime(),
                 60 * 1000, //AlarmManager.INTERVAL_HOUR * 2,
                 alarmIntent);
+
+        IntentFilter intentFilter = new IntentFilter(NewComicService.ACTION_NEW);
+        NewComicBR newComicBR = new NewComicBR();
+        LocalBroadcastManager.getInstance(this).registerReceiver(newComicBR, intentFilter);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

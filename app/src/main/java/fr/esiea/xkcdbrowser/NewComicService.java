@@ -8,7 +8,7 @@ import android.util.Log;
 
 public class NewComicService extends IntentService {
     // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
-    private static final String ACTION_NEW = "fr.esiea.xkcdbrowser.action.NEW";
+    public static final String ACTION_NEW = "fr.esiea.xkcdbrowser.action.NEW";
 
     final static String TAG = "NewComicService";
 

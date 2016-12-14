@@ -18,6 +18,7 @@ public class NewComicBR extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "onReceive");
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.ic_menu_fav)
                 .setContentTitle("XKCDBrowser")
                 .setContentText("New comic(s)!");
 
