@@ -192,6 +192,7 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
     }
 
     private void loadComics() {
+        Log.d(TAG, "ID: " + lastId);
         if (this.comics.size() == 0) {
             try {
                 lastId = new ComicFetcher().execute("http://xkcd.com/info.0.json", this).get().getId();
@@ -199,6 +200,7 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
                 Log.d(TAG, e.getLocalizedMessage());
             }
         }
+        Log.d(TAG, "ID: " + lastId);
         loadNNext(10, lastId);
         lastId -= 10;
     }

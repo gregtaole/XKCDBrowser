@@ -46,7 +46,7 @@ public class ComicBuilder {
 
                 newComic = new Comic(sb.toString());
 
-                Log.d("ComicBuilder", newComic.getTitle());
+                //Log.d("ComicBuilder", newComic.getTitle());
                 return newComic;
             }
         }
@@ -57,4 +57,3 @@ public class ComicBuilder {
         return null;
     }
 }
-

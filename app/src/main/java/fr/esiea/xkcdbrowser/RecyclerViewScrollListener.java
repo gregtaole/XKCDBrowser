@@ -16,10 +16,10 @@ public abstract class RecyclerViewScrollListener extends RecyclerView.OnScrollLi
     int firstVisibleItem, visibleItemCount, totalItemCount;
 
     private boolean infiniteScrollingEnabled = true;
-
     private boolean controlsVisible = true;
 
-    public RecyclerViewScrollListener(){
+    public RecyclerViewScrollListener() {
+
     }
 
     // So TWO issues here.
@@ -32,18 +32,18 @@ public abstract class RecyclerViewScrollListener extends RecyclerView.OnScrollLi
         super.onScrolled(recyclerView, dx, dy);
 
         RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
-
         visibleItemCount = recyclerView.getChildCount();
+
         if (manager instanceof GridLayoutManager) {
             GridLayoutManager gridLayoutManager = (GridLayoutManager)manager;
             firstVisibleItem = gridLayoutManager.findFirstVisibleItemPosition();
             totalItemCount = gridLayoutManager.getItemCount();
-        } else if (manager instanceof LinearLayoutManager) {
+        }
+        else if (manager instanceof LinearLayoutManager) {
             LinearLayoutManager linearLayoutManager = (LinearLayoutManager)manager;
             firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
             totalItemCount = linearLayoutManager.getItemCount();
         }
-
 
         if (infiniteScrollingEnabled) {
             if (loading) {
@@ -53,10 +53,8 @@ public abstract class RecyclerViewScrollListener extends RecyclerView.OnScrollLi
                 }
             }
 
-
             if (!loading && (totalItemCount - visibleItemCount <= firstVisibleItem + visibleThreshold)) {
-                // End has been reached
-                // do something
+                // End has been reached, do something
                 onLoadMore();
                 loading = true;
             }
@@ -81,8 +79,8 @@ public abstract class RecyclerViewScrollListener extends RecyclerView.OnScrollLi
             scrolledDistance = 0;
         }
 
-        if ((controlsVisible && dy>0) || (!controlsVisible && dy <0)) {
-            scrolledDistance+=dy;
+        if ((controlsVisible && dy > 0) || (!controlsVisible && dy < 0)) {
+            scrolledDistance += dy;
         }
     }
 
@@ -102,4 +100,3 @@ public abstract class RecyclerViewScrollListener extends RecyclerView.OnScrollLi
         previousTotal = 0;
     }
 }
-

@@ -3,7 +3,6 @@ package fr.esiea.xkcdbrowser;
 import android.os.AsyncTask;
 import android.util.Log;
 
-
 public class ComicFetcher extends AsyncTask<Object, Integer, Comic> {
     private static final String TAG = "ComicFetcher";
     private ComicFetcherInterface callerActivity;
