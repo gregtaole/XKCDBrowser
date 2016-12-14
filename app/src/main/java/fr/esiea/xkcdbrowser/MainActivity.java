@@ -1,11 +1,14 @@
 package fr.esiea.xkcdbrowser;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -32,9 +35,14 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
     private DividerItemDecoration comicRecyclerDivider;
     private ConnectivityManager connectivityManager;
     private NetworkInfo networkInfo;
+    private Intent newComicIntent;
+    private AlarmManager alarmManager;
+    private PendingIntent alarmIntent;
     private int lastId;
 
     public static final String EXTRA_COMIC = "fr.esiea.xkcdbrowser.COMIC";
+    public static final String EXTRA_URL = "fr.esiea.xkcdbrowser.XKCD_LAST_COMIC_URL";
+    public static final String XKCD_LAST_COMIC_URL = "http://xkcd.com/info.0.json";
 
     final static String TAG = "MainActivity";
 
@@ -42,6 +50,17 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Service and alarm
+        alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        newComicIntent = new Intent(this, NewComicService.class);
+        newComicIntent.putExtra(EXTRA_URL, XKCD_LAST_COMIC_URL);
+        alarmIntent = PendingIntent.getService(this, 0, newComicIntent, 0);
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime(),
+                60 * 1000, //AlarmManager.INTERVAL_HOUR * 2,
+                alarmIntent);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -195,7 +214,7 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
         Log.d(TAG, "ID: " + lastId);
         if (this.comics.size() == 0) {
             try {
-                lastId = new ComicFetcher().execute("http://xkcd.com/info.0.json", this).get().getId();
+                lastId = new ComicFetcher().execute(XKCD_LAST_COMIC_URL, this).get().getId();
             } catch (InterruptedException | ExecutionException e) {
                 Log.d(TAG, e.getLocalizedMessage());
             }
