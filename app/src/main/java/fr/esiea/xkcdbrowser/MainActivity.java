@@ -214,8 +214,8 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
             }
         }
         Log.d(TAG, "ID: " + lastId);
-        loadNNext(10, lastId);
-        lastId -= 10;
+        loadNNext(Constants.LOAD_N, lastId);
+        lastId -= Constants.LOAD_N;
     }
 
     private void loadNNext(int n, int lastId) {
@@ -232,10 +232,10 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
         newComicIntent = new Intent(this, NewComicService.class);
         newComicIntent.putExtra(EXTRA_URL, Constants.XKCD_LAST_COMIC_URL);
         newComicIntent.putExtra(EXTRA_LAST_ID, lastId);
-        alarmIntent = PendingIntent.getService(this, 0, newComicIntent, 0);
+        alarmIntent = PendingIntent.getService(this, 0, newComicIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime(),
-                60 * 1000, //AlarmManager.INTERVAL_HOUR * 2,
+                AlarmManager.INTERVAL_HOUR * 2,
                 alarmIntent);
 
         IntentFilter intentFilter = new IntentFilter(NewComicService.ACTION_NEW);
