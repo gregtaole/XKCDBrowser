@@ -3,6 +3,7 @@ package fr.esiea.xkcdbrowser;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -30,12 +31,15 @@ public class NewComicService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "onHandleIntent");
-        handleActionNew(intent.getStringExtra(MainActivity.EXTRA_URL), intent.getIntExtra(MainActivity.EXTRA_LAST_ID, 0));
+        handleActionNew(intent.getStringExtra(MainActivity.EXTRA_URL));
     }
 
-    private void handleActionNew(String url, int previousLastId) {
+    private void handleActionNew(String url) {
         Log.d(TAG, url);
         int lastId = - 1;
+        SharedPreferences sharedPreferences = this.getSharedPreferences(Constants.SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE);
+        int previousLastId = sharedPreferences.getInt(Constants.CURRENT_LAST_ID, 0);
+
         if (previousLastId != 0) {
             try {
                 URL lastUrl = new URL(url);

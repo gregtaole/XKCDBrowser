@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -44,7 +45,6 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
 
     public static final String EXTRA_COMIC = "fr.esiea.xkcdbrowser.COMIC";
     public static final String EXTRA_URL = "fr.esiea.xkcdbrowser.XKCD_LAST_COMIC_URL";
-    public static final String EXTRA_LAST_ID  = "fr.esie.xkcdbrowser.LAST_ID";
 
     final static String TAG = "MainActivity";
 
@@ -209,6 +209,10 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
         if (this.comics.size() == 0) {
             try {
                 lastId = new ComicFetcher().execute(Constants.XKCD_LAST_COMIC_URL, this).get().getId();
+                SharedPreferences sharedPreferences = this.getSharedPreferences(Constants.SHARED_PREFERENCE_FILE , Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt(Constants.CURRENT_LAST_ID, lastId);
+                editor.commit();
             } catch (InterruptedException | ExecutionException e) {
                 Log.d(TAG, e.getLocalizedMessage());
             }
@@ -231,7 +235,6 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
         alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         newComicIntent = new Intent(this, NewComicService.class);
         newComicIntent.putExtra(EXTRA_URL, Constants.XKCD_LAST_COMIC_URL);
-        newComicIntent.putExtra(EXTRA_LAST_ID, lastId);
         alarmIntent = PendingIntent.getService(this, 0, newComicIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime(),
