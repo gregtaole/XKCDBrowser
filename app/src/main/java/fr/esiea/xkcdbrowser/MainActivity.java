@@ -10,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v4.app.DialogFragment;
@@ -29,20 +30,25 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends ComicFetcherInterface implements NavigationView.OnNavigationItemSelectedListener, NetworkConnectivityDialogFragment.NetworkConnectivityListener {
     private ArrayList<Comic> comics = new ArrayList<>();
     private RecyclerView comicRecycler;
     private ComicAdapter comicAdapter;
+    private LinearLayoutManager recyclerLayoutManager;
     private DividerItemDecoration comicRecyclerDivider;
     private ConnectivityManager connectivityManager;
     private NetworkInfo networkInfo;
     private Intent newComicIntent;
     private AlarmManager alarmManager;
     private PendingIntent alarmIntent;
+    //private Parcelable listState;
     private int lastId;
+    private int currentVisiblePosition;
 
+    public static final String LIST_STATE = "fr.esiea.xkcdbrowser.LIST_STATE";
     public static final String EXTRA_COMIC = "fr.esiea.xkcdbrowser.COMIC";
     public static final String EXTRA_URL = "fr.esiea.xkcdbrowser.XKCD_LAST_COMIC_URL";
 
@@ -70,7 +76,7 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
 
         comicRecycler = (RecyclerView) findViewById(R.id.main_recycler_view);
         comicAdapter = new ComicAdapter(comics);
-        LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerLayoutManager = new LinearLayoutManager(getApplicationContext());
         comicRecyclerDivider = new DividerItemDecoration(comicRecycler.getContext(), recyclerLayoutManager.getOrientation());
         comicRecycler.setLayoutManager(recyclerLayoutManager);
         comicRecycler.setItemAnimator(new DefaultItemAnimator());
@@ -115,12 +121,33 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
     @Override
     protected void onRestart() {
         super.onRestart();
+
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connectivityManager.getActiveNetworkInfo();
         if (!(networkInfo != null && networkInfo.isConnected())) {
             DialogFragment dialogFragment = new NetworkConnectivityDialogFragment();
             dialogFragment.show(this.getSupportFragmentManager(), "NetworkConnectivityDialog");
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences = this.getSharedPreferences(Constants.SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE);
+        currentVisiblePosition = sharedPreferences.getInt(Constants.CURRENT_VISIBLE_POSITION, 0);
+        Log.d(TAG, "onResume, currentVisiblePosition: " + currentVisiblePosition);
+        recyclerLayoutManager.scrollToPosition(currentVisiblePosition);
+        currentVisiblePosition = 0;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        currentVisiblePosition = recyclerLayoutManager.findFirstVisibleItemPosition();
+        SharedPreferences sharedPreferences = this.getSharedPreferences(Constants.SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(Constants.CURRENT_VISIBLE_POSITION, currentVisiblePosition);
+        editor.commit();
     }
 
     @Override
@@ -191,7 +218,7 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
 
     private void loadMoreComics() {
         comicAdapter.setShowLoader(true);
-        comicAdapter.notifyDataSetChanged();
+        //comicAdapter.notifyDataSetChanged();
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -205,7 +232,6 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
     }
 
     private void loadComics() {
-        Log.d(TAG, "ID: " + lastId);
         if (this.comics.size() == 0) {
             try {
                 lastId = new ComicFetcher().execute(Constants.XKCD_LAST_COMIC_URL, this).get().getId();
@@ -217,7 +243,6 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
                 Log.d(TAG, e.getLocalizedMessage());
             }
         }
-        Log.d(TAG, "ID: " + lastId);
         loadNNext(Constants.LOAD_N, lastId);
         lastId -= Constants.LOAD_N;
     }

@@ -34,7 +34,7 @@ public class NewComicBR extends BroadcastReceiver {
                 .setContentIntent(startAppPendingIntent);
 
         NotificationManager mNotifyMgr =
-                (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         mNotifyMgr.notify(0, mBuilder.build());
     }
 }
