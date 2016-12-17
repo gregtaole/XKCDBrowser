@@ -15,10 +15,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.concurrent.ExecutionException;
 
 public class NewComicService extends IntentService {
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
     public static final String ACTION_NEW = "fr.esiea.xkcdbrowser.action.NEW";
 
     final static String TAG = "NewComicService";

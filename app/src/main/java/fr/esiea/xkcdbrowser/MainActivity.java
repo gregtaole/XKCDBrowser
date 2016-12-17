@@ -135,9 +135,7 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
         super.onResume();
         SharedPreferences sharedPreferences = this.getSharedPreferences(Constants.SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE);
         currentVisiblePosition = sharedPreferences.getInt(Constants.CURRENT_VISIBLE_POSITION, 0);
-        Log.d(TAG, "onResume, currentVisiblePosition: " + currentVisiblePosition);
-        recyclerLayoutManager.scrollToPosition(currentVisiblePosition);
-        currentVisiblePosition = 0;
+        comicRecycler.scrollToPosition(currentVisiblePosition);
     }
 
     @Override
@@ -162,19 +160,14 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -185,7 +178,6 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_browse) {
@@ -218,7 +210,6 @@ public class MainActivity extends ComicFetcherInterface implements NavigationVie
 
     private void loadMoreComics() {
         comicAdapter.setShowLoader(true);
-        //comicAdapter.notifyDataSetChanged();
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

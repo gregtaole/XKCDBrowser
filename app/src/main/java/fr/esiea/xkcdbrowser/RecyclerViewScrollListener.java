@@ -3,6 +3,7 @@ package fr.esiea.xkcdbrowser;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 public abstract class RecyclerViewScrollListener extends RecyclerView.OnScrollListener {
 
@@ -17,6 +18,8 @@ public abstract class RecyclerViewScrollListener extends RecyclerView.OnScrollLi
 
     private boolean infiniteScrollingEnabled = true;
     private boolean controlsVisible = true;
+
+    private static final String TAG = "RecyclerViewScroll";
 
     public RecyclerViewScrollListener() {
 
@@ -34,16 +37,9 @@ public abstract class RecyclerViewScrollListener extends RecyclerView.OnScrollLi
         RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
         visibleItemCount = recyclerView.getChildCount();
 
-        if (manager instanceof GridLayoutManager) {
-            GridLayoutManager gridLayoutManager = (GridLayoutManager)manager;
-            firstVisibleItem = gridLayoutManager.findFirstVisibleItemPosition();
-            totalItemCount = gridLayoutManager.getItemCount();
-        }
-        else if (manager instanceof LinearLayoutManager) {
-            LinearLayoutManager linearLayoutManager = (LinearLayoutManager)manager;
-            firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
-            totalItemCount = linearLayoutManager.getItemCount();
-        }
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager)manager;
+        firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+        totalItemCount = linearLayoutManager.getItemCount();
 
         if (infiniteScrollingEnabled) {
             if (loading) {
@@ -55,6 +51,7 @@ public abstract class RecyclerViewScrollListener extends RecyclerView.OnScrollLi
 
             if (!loading && (totalItemCount - visibleItemCount <= firstVisibleItem + visibleThreshold)) {
                 // End has been reached, do something
+                Log.d(TAG, "Calling onLoadMore()");
                 onLoadMore();
                 loading = true;
             }

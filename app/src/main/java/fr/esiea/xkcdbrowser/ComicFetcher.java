@@ -12,7 +12,7 @@ public class ComicFetcher extends AsyncTask<Object, Integer, Comic> {
         ComicBuilder builder = ComicBuilder.getInstance();
         Comic newComic = builder.buildComic((String) params[0]);
         callerActivity = (ComicFetcherInterface) params[1];
-        Log.d(TAG, newComic.getTitle());
+        //Log.d(TAG, newComic.getTitle());
         return newComic;
     }
 
