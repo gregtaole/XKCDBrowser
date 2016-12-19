@@ -20,4 +20,14 @@
 
     <string name="action_favorite">Ajouter au favoris</string>
     <string name="action_settings">Paramètres</string>
+
+    <string name="about_text">
+        Réalisée par :\n
+        <a href="https://github.com/gregtaole">@gregtaole</a>\n
+        <a href="https://github.com/avignat">@avignat</a>\n
+        \n
+        <a href="https://github.com/avignat/XKCDBrowser">Code source disponible sur Github</a>\n
+        \n
+        Sous Licence MIT
+    </string>
 </resources>

@@ -32,6 +32,10 @@ public class AboutActivity extends AppCompatActivity implements NavigationView.O
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        TextView aboutText = (TextView) findViewById(R.id.textView);
+        aboutText.setText(R.string.about_text);
+        aboutText.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override
