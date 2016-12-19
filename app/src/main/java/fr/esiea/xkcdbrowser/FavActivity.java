@@ -20,7 +20,9 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-public class FavActivity extends ComicFetcherInterface implements NavigationView.OnNavigationItemSelectedListener, NetworkConnectivityDialogFragment.NetworkConnectivityListener {
+public class FavActivity extends ComicFetcherInterface
+        implements NavigationView.OnNavigationItemSelectedListener,
+        NetworkConnectivityDialogFragment.NetworkConnectivityListener {
     private ArrayList<Comic> favComics = new ArrayList<>();
     private ArrayList<Integer> favIds = new ArrayList<>();
     private RecyclerView comicRecycler;
@@ -35,6 +37,7 @@ public class FavActivity extends ComicFetcherInterface implements NavigationView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.favorites_toolbar);
         setSupportActionBar(toolbar);
 
@@ -46,10 +49,13 @@ public class FavActivity extends ComicFetcherInterface implements NavigationView
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.favorites_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
         comicRecycler = (RecyclerView) findViewById(R.id.favorites_recycler_view);
         comicAdapter = new ComicAdapter(favComics);
+
         LinearLayoutManager recyclerLayoutManager = new LinearLayoutManager(getApplicationContext());
-        comicRecyclerDivider = new DividerItemDecoration(comicRecycler.getContext(), recyclerLayoutManager.getOrientation());
+        comicRecyclerDivider = new DividerItemDecoration(comicRecycler.getContext(),
+                recyclerLayoutManager.getOrientation());
         comicRecycler.setLayoutManager(recyclerLayoutManager);
         comicRecycler.setItemAnimator(new DefaultItemAnimator());
         comicRecycler.addItemDecoration(comicRecyclerDivider);
@@ -87,6 +93,7 @@ public class FavActivity extends ComicFetcherInterface implements NavigationView
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.favorites_drawer_layout);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -145,6 +152,7 @@ public class FavActivity extends ComicFetcherInterface implements NavigationView
 
     private void loadComics() {
         favIds = favManager.getFavorites();
+
         for (Integer id : favIds) {
             new ComicFetcher().execute("http://xkcd.com/" + String.valueOf(id) +"/info.0.json", this);
         }

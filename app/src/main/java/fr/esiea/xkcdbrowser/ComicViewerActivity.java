@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -48,11 +47,13 @@ public class ComicViewerActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_comic_viewer, menu);
+
         if (favManager.isAlreadyFavorites(comic)) {
             menu.getItem(0).setIcon(getDrawable(R.drawable.ic_menu_unfav));
         } else {
             menu.getItem(0).setIcon(getDrawable(R.drawable.ic_menu_fav));
         }
+
         return true;
     }
 
@@ -67,16 +68,19 @@ public class ComicViewerActivity extends AppCompatActivity {
             if (favManager.isAlreadyFavorites(comic)) {
                 favManager.removeFavorite(comic);
                 item.setIcon(getDrawable(R.drawable.ic_menu_fav));
-                Snackbar.make(findViewById(R.id.comic_viewer_coordinator), R.string.snackbar_removed_favorites, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(findViewById(R.id.comic_viewer_coordinator),
+                        R.string.snackbar_removed_favorites, Snackbar.LENGTH_SHORT).show();
             }
             else {
                 try {
                     favManager.addToFavorites(comic);
                     item.setIcon(getDrawable(R.drawable.ic_menu_unfav));
-                    Snackbar.make(findViewById(R.id.comic_viewer_coordinator), R.string.snackbar_favorites, Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.comic_viewer_coordinator),
+                            R.string.snackbar_favorites, Snackbar.LENGTH_SHORT).show();
                 }
                 catch (AlreadyFavoriteException e) {
-                    Snackbar.make(findViewById(R.id.comic_viewer_coordinator), R.string.snackbar_already_favorite, Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.comic_viewer_coordinator),
+                            R.string.snackbar_already_favorite, Snackbar.LENGTH_SHORT).show();
                 }
             }
 

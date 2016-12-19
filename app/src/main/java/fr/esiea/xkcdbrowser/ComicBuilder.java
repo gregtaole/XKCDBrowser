@@ -36,7 +36,8 @@ public class ComicBuilder {
             connection.connect();
 
             if(connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(connection.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line;
 
@@ -46,7 +47,6 @@ public class ComicBuilder {
 
                 newComic = new Comic(sb.toString());
 
-                //Log.d("ComicBuilder", newComic.getTitle());
                 return newComic;
             }
         }

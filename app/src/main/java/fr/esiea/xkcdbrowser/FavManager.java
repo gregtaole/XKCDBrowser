@@ -34,27 +34,19 @@ public class FavManager extends Activity {
     }
 
     public void addToFavorites(Comic comic) throws AlreadyFavoriteException {
-        Log.d(TAG, favorites.toString());
-
         if(isAlreadyFavorites(comic)) {
             throw new AlreadyFavoriteException();
         }
 
         favorites.add(comic.getId());
         updateFavorites();
-
-        Log.d(TAG, favorites.toString());
     }
 
     public void removeFavorite(Comic comic) {
-        Log.d(TAG, favorites.toString());
-
         if(isAlreadyFavorites(comic)) {
             favorites.remove(favorites.indexOf(comic.getId()));
             updateFavorites();
         }
-
-        Log.d(TAG, favorites.toString());
     }
 
     private void updateFavorites() {
@@ -81,9 +73,11 @@ public class FavManager extends Activity {
             inputStream = context.openFileInput(favFilename);
             reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
+
             while ((line = reader.readLine()) != null) {
                 favorites.add(Integer.valueOf(line));
             }
+
             inputStream.close();
         }
         catch (IOException e) {

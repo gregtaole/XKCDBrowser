@@ -28,14 +28,14 @@ public class NewComicService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d(TAG, "onHandleIntent");
         handleActionNew(intent.getStringExtra(MainActivity.EXTRA_URL));
     }
 
     private void handleActionNew(String url) {
         Log.d(TAG, url);
         int lastId = - 1;
-        SharedPreferences sharedPreferences = this.getSharedPreferences(Constants.SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences =
+                this.getSharedPreferences(Constants.SHARED_PREFERENCE_FILE, Context.MODE_PRIVATE);
         int previousLastId = sharedPreferences.getInt(Constants.CURRENT_LAST_ID, 0);
 
         if (previousLastId != 0) {
@@ -46,13 +46,15 @@ public class NewComicService extends IntentService {
                 connection.connect();
 
                 if(connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    BufferedReader reader =
+                            new BufferedReader(new InputStreamReader(connection.getInputStream()));
                     StringBuilder sb = new StringBuilder();
                     String line;
 
                     while ((line = reader.readLine()) != null) {
                         sb.append(line + "\n");
                     }
+
                     JSONObject jsonObject = new JSONObject(sb.toString());
                     lastId = jsonObject.getInt("num");
                 }
@@ -60,9 +62,8 @@ public class NewComicService extends IntentService {
             catch (IOException | JSONException e) {
                 Log.d("ComicBuilder", e.getMessage());
             }
-            Log.d(TAG, "previousLastId" + String.valueOf(previousLastId) + ", lastId" + String.valueOf(lastId));
-            if (lastId > previousLastId) {
 
+            if (lastId > previousLastId) {
                 Intent intent = new Intent();
                 intent.setAction(ACTION_NEW);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent);

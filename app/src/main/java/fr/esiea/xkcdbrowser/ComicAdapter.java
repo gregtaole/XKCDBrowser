@@ -60,13 +60,16 @@ public class ComicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.comic_list, parent, false);
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.comic_list, parent, false);
             return new ItemViewHolder(itemView);
         }
         else if (viewType == TYPE_FOOTER) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.comic_list_footer, parent, false);
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.comic_list_footer, parent, false);
             return  new ComicAdapter.FooterViewHolder(itemView);
         }
+
         return null;
     }
 
@@ -80,6 +83,7 @@ public class ComicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             itemViewHolder.imageView.setImageURI(comic.getImageUri());
         } else if (holder instanceof FooterViewHolder) {
             FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
+
             if (showLoader) {
                 footerViewHolder.progressBar.setVisibility(View.VISIBLE);
             } else {

@@ -6,18 +6,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 public class NewComicBR extends BroadcastReceiver {
     private final String TAG = "NewComicBR";
 
     public NewComicBR() {
-        Log.d(TAG, "constructor");
+
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "onReceive");
         Intent startAppIntent = new Intent(context, MainActivity.class);
         PendingIntent startAppPendingIntent = PendingIntent.getActivity(
                 context,
@@ -25,6 +23,7 @@ public class NewComicBR extends BroadcastReceiver {
                 startAppIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
+
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_menu_fav)
                 .setContentTitle("XKCDBrowser")
